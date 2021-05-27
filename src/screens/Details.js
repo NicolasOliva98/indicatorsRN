@@ -3,7 +3,7 @@ import { TouchableOpacity, FlatList, ScrollView, ActivityIndicator } from 'react
 import { Div as View, Text, Icon } from 'react-native-magnus'
 import { rv, hp } from '../helpers/responsive'
 import useFetch from '../hooks/useFetch'
-import { Loading } from '../components'
+import { Loading,Header } from '../components'
 import moment from 'moment'
 const Details = ({ navigation, route }) => {
     const tittle = route.params.title
@@ -16,11 +16,9 @@ const Details = ({ navigation, route }) => {
         }
     }, [response]);
 
-    useEffect(() => {
-        navigation.setOptions({ title: tittle })
-    }, [navigation])
-
-
+    const goBack = () => {
+        navigation.goBack()
+    }
     const _RenderItem = ({ item, index }) => {
         return (
             <View key={index}>
@@ -48,12 +46,15 @@ const Details = ({ navigation, route }) => {
     return (loading ?
         <Loading
         /> :
-        <View flex={1} bg='white' px={rv(hp(3))}>
-            <FlatList
-                data={Indicators.serie}
-                keyExtractor={(item, index) => String(index)}
-                renderItem={(item, index) => _RenderItem(item, index)}
-            />
+        <View flex={1}>
+            <Header tittle={tittle} back={goBack} />
+            <View flex={1} bg='white' px={rv(hp(3))}>
+                <FlatList
+                    data={Indicators.serie}
+                    keyExtractor={(item, index) => String(index)}
+                    renderItem={(item, index) => _RenderItem(item, index)}
+                />
+            </View>
         </View>
     )
 }

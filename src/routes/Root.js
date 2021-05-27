@@ -1,10 +1,6 @@
 import React from 'react'
-import { SafeAreaView, StatusBar, Platform } from 'react-native';
-
-/* Navigation */
+import { SafeAreaView, StatusBar } from 'react-native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-
-/* Single stack */
 import HomeScren from '../screens/Home'
 import DetailsScreen from '../screens/Details'
 import WeekDetailsScreen from '../screens/WeekDetails'
@@ -15,13 +11,14 @@ const RootStack = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StatusBar barStyle='dark-content' backgroundColor='white' />
-            <Stack.Navigator>
+            <Stack.Navigator headerMode='none'>
                 <Stack.Screen
                     name="Indicadores"
                     component={HomeScren}
                     options={{
                         ...TransitionPresets.ScaleFromCenterAndroid
                     }}
+                    initialParams={{tittle:'Indicadores'}}
                 />
                 <Stack.Screen
                     name="Details"

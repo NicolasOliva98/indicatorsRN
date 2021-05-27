@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
+import { PermissionsAndroid, Platform, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import GeoLocation from '@react-native-community/geolocation';
 import Root from './src/routes/Root';
 
 export default App = () => {
-
   const [currentLatitude, setCurrentLatitude] = useState('')
   const [currentLongitude, setCurrentLongitude] = useState('')
 

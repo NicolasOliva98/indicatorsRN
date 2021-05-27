@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { TouchableOpacity, FlatList } from 'react-native'
 import { Div as View, Text, Icon } from 'react-native-magnus'
 import { rv, hp } from '../helpers/responsive'
-import { Loading } from '../components'
+import { Loading, Header } from '../components'
 import useFetch from '../hooks/useFetch'
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
 
     const [Indicators, setIndicators] = useState({})
     const { response, loading } = useFetch({ method: 'GET', url: '/api' });
@@ -44,13 +44,17 @@ const Home = ({ navigation }) => {
     return (loading ?
         <Loading />
         :
-        <View flex={1} bg='white' px={rv(hp(3))}>
-            <FlatList
-                data={Indicators}
-                keyExtractor={item => item.codigo}
-                renderItem={(item, index) => _RenderItem(item, index)}
-            />
+        <View flex={1}>
+            <Header tittle={route.params.tittle}/>
+            <View flex={1} bg='white' px={rv(hp(3))}>
+                <FlatList
+                    data={Indicators}
+                    keyExtractor={item => item.codigo}
+                    renderItem={(item, index) => _RenderItem(item, index)}
+                />
+            </View>
         </View>
+
     )
 }
 
