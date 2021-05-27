@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { TouchableOpacity, FlatList, ScrollView, ActivityIndicator } from 'react-native'
+import { TouchableOpacity, FlatList } from 'react-native'
 import { Div as View, Text, Icon } from 'react-native-magnus'
 import { rv, hp } from '../helpers/responsive'
-
-import Axios from 'axios'
+import { Loading } from '../components'
+import useFetch from '../hooks/useFetch'
 
 const Home = ({ navigation }) => {
-
+    const { get } = useFetch()
     const [Indicators, setIndicators] = useState({})
     const [loading, setLoading] = useState(false)
 
     const getData = async () => {
         setLoading(true)
-        const { data } = await Axios.get('https://mindicador.cl/api')
+        const { data } = await get('https://mindicador.cl/api')
         const List = Object.entries(data).map(([key, value]) => {
             return value
         })
@@ -37,10 +37,10 @@ const Home = ({ navigation }) => {
                             <Text fontSize={rv(hp(2.6))} my={3} fontWeight='400' >{item.unidad_medida}</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('Week', { id: item.codigo, title: item.nombre, item: item })}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Week', { id: item.codigo, title: item.nombre, item: item, type: item.unidad_medida })}>
                         <View row>
-                            <Icon name='info' fontFamily='Feather' fontSize={rv(hp(3.5))} color='blue600' />
-                            <Icon name='chevron-right' fontFamily='Feather' fontSize={rv(hp(3.5))} color='green' />
+                            <Icon name='info' fontFamily='Feather' fontSize={rv(hp(4))} color='blue600' />
+                            <Icon name='chevron-right' fontFamily='Feather' fontSize={rv(hp(4))} color='blue600' />
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -49,20 +49,15 @@ const Home = ({ navigation }) => {
         )
     }
 
-    return (
+    return (loading ?
+        <Loading />
+        :
         <View flex={1} bg='white' px={rv(hp(3))}>
-            {
-                loading ?
-                    <View flex={1} justifyContent='center' alignItems='center'>
-                        <Text>Cargando datos...</Text>
-                        <ActivityIndicator color='blue' size='large' />
-                    </View> :
-                    <FlatList
-                        data={Indicators}
-                        keyExtractor={item => item.codigo}
-                        renderItem={(item, index) => _RenderItem(item, index)}
-                    />
-            }
+            <FlatList
+                data={Indicators}
+                keyExtractor={item => item.codigo}
+                renderItem={(item, index) => _RenderItem(item, index)}
+            />
         </View>
     )
 }

@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { TouchableOpacity, FlatList, ScrollView, ActivityIndicator } from 'react-native'
 import { Div as View, Text, Icon } from 'react-native-magnus'
 import { LineChart } from 'react-native-chart-kit'
 import { rv, hp, wp } from '../helpers/responsive'
 import moment from 'moment'
-import Axios from 'axios'
+import { Loading } from '../components'
+import useFetch from '../hooks/useFetch'
 
 const WeekDetails = ({ navigation, route }) => {
-    const tittle = route.params.title;
-    const item = route.params.item;
-    const id = route.params.id;
-
+    const tittle = route.params.title
+    const { item, id, type } = route.params
+    const { get } = useFetch()
     const [Indicators, setIndicators] = useState([])
     const [loading, setLoading] = useState(false)
 
     const getData = async () => {
         setLoading(true)
-        const { data } = await Axios.get(`https://mindicador.cl/api/${id}`)
+        const { data } = await get(`https://mindicador.cl/api/${id}`)
         setIndicators(data.serie.reverse())
         setLoading(false)
     }
@@ -31,11 +30,10 @@ const WeekDetails = ({ navigation, route }) => {
         }
     }, [])
 
-    return (
+    return (loading ?
+        <Loading
+        /> :
         <View flex={1} bg='white' px={rv(hp(3))}>
-            {
-
-            }
             <View
                 mt={rv(hp(2))}
                 bg='white'
@@ -43,7 +41,7 @@ const WeekDetails = ({ navigation, route }) => {
                 shadow='md'
             >
                 <View my={rv(hp(2))} alignItems='center'>
-                    <Text fontWeight='bold' fontSize={rv(hp(5))} color='blue700'>$ {item.valor}</Text>
+                    <Text fontWeight='bold' fontSize={rv(hp(5))} color='blue700'>{item.valor}</Text>
                 </View>
                 <View mx={20} my={rv(hp(2))} alignItems='center' row>
                     <Text fontWeight='600' fontSize={rv(hp(2.8))}>Nombre </Text>
@@ -77,14 +75,14 @@ const WeekDetails = ({ navigation, route }) => {
                                 verticalLabelRotation={50}
                                 width={rv(wp(92))}
                                 height={rv(hp(42))}
-                                yAxisLabel="$"
+                                yAxisLabel={type != 'Porcenjate' ? '$' : '%'}
                                 yAxisSuffix=""
                                 yAxisInterval={1}
                                 chartConfig={{
                                     backgroundColor: "#fff",
                                     backgroundGradientFrom: "#021B79",
                                     backgroundGradientTo: "#0575E6",
-                                    decimalPlaces: 0,
+                                    decimalPlaces: 1,
                                     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                                     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                                     style: {
