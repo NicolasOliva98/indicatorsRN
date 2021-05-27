@@ -19,13 +19,18 @@ export default App = () => {
     })
   }
 
-//Esta funcion se crea para versiones de sdk menor al 23, superior a ella la ubicación se proporciona automaticamente.
-  const callLocation = () => { 
+  /*
+  callLocation()
+  
+  Esta function se utiliza para versiones de sdk menor al 23 de Android, 
+  superior a ella la ubicación se proporciona automaticamente y solo con el uso de la aplicaicón. 
+  */
+  const callLocation = () => {
     if (Platform.OS === 'ios') {
       getcurrentLocation()
     } else {
       const requesPermission = async () => {
-        const granted = await PermissionsAndroid.request( 
+        const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           {
             title: 'Permisos de localización',
