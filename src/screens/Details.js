@@ -8,25 +8,17 @@ import moment from 'moment'
 const Details = ({ navigation, route }) => {
     const tittle = route.params.title
     const { id, type } = route.params
-    const { get } = useFetch();
     const [Indicators, setIndicators] = useState({})
-    const [loading, setLoading] = useState(false)
+    const { response, loading } = useFetch({ method: 'GET', url: `/api/${id}` });
+    useEffect(() => {
+        if (response != null) {
+            setIndicators(response)
+        }
+    }, [response]);
 
-    const getData = async () => {
-        setLoading(true)
-        const { data } = await get(`https://mindicador.cl/api/${id}`)
-        setIndicators(data)
-        setLoading(false)
-    }
     useEffect(() => {
         navigation.setOptions({ title: tittle })
     }, [navigation])
-
-    useEffect(() => {
-        getData();
-        return () => {
-        }
-    }, [])
 
 
     const _RenderItem = ({ item, index }) => {
@@ -44,7 +36,7 @@ const Details = ({ navigation, route }) => {
                                 fontSize={rv(hp(4))} color={
                                     type != 'Porcentaje' ? 'green600' : 'blue600'
                                 } fontFamily='Feather' />
-                            <Text ml={rv(hp(2))} fontSize={rv(hp(3))}>{ item.valor}</Text>
+                            <Text ml={rv(hp(2))} fontSize={rv(hp(3))}>{item.valor}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>

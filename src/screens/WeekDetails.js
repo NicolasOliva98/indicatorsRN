@@ -9,26 +9,17 @@ import useFetch from '../hooks/useFetch'
 const WeekDetails = ({ navigation, route }) => {
     const tittle = route.params.title
     const { item, id, type } = route.params
-    const { get } = useFetch()
     const [Indicators, setIndicators] = useState([])
-    const [loading, setLoading] = useState(false)
-
-    const getData = async () => {
-        setLoading(true)
-        const { data } = await get(`https://mindicador.cl/api/${id}`)
-        setIndicators(data.serie.reverse())
-        setLoading(false)
-    }
+    const { response, loading } = useFetch({ method: 'GET', url: `/api/${id}` });
+    useEffect(() => {
+        if (response != null) {
+            setIndicators(response.serie.reverse())
+        }
+    }, [response]);
 
     useEffect(() => {
         navigation.setOptions({ title: tittle })
     }, [navigation])
-
-    useEffect(() => {
-        getData();
-        return () => {
-        }
-    }, [])
 
     return (loading ?
         <Loading
@@ -41,7 +32,7 @@ const WeekDetails = ({ navigation, route }) => {
                 shadow='md'
             >
                 <View my={rv(hp(2))} alignItems='center'>
-                    <Text fontWeight='bold' fontSize={rv(hp(5))} color='blue700'>{`${item.unidad_medida === 'Porcentaje' ? '%' : '$'}${item.valor}`}</Text>
+                    <Text fontWeight='bold' fontSize={rv(hp(5))} color='blue700'>{`${type === 'Porcentaje' ? '%' : '$'}${item.valor}`}</Text>
                 </View>
                 <View mx={20} my={rv(hp(2))} alignItems='center' row>
                     <Text fontWeight='600' fontSize={rv(hp(2.8))}>Nombre </Text>
@@ -75,7 +66,7 @@ const WeekDetails = ({ navigation, route }) => {
                                 verticalLabelRotation={50}
                                 width={rv(wp(92))}
                                 height={rv(hp(42))}
-                                yAxisLabel={item.unidad_medida === 'Porcentaje' ? '%' : '$'}
+                                yAxisLabel={type === 'Porcentaje' ? '%' : '$'}
                                 yAxisSuffix=""
                                 yAxisInterval={1}
                                 chartConfig={{

@@ -6,26 +6,18 @@ import { Loading } from '../components'
 import useFetch from '../hooks/useFetch'
 
 const Home = ({ navigation }) => {
-    const { get } = useFetch()
+
     const [Indicators, setIndicators] = useState({})
-    const [loading, setLoading] = useState(false)
-
-    const getData = async () => {
-        setLoading(true)
-        const { data } = await get('https://mindicador.cl/api')
-        const List = Object.entries(data).map(([key, value]) => {
-            return value
-        })
-        const newData = List.filter(x => x.codigo != undefined)
-        setIndicators(newData)
-        setLoading(false)
-    }
-
+    const { response, loading } = useFetch({ method: 'GET', url: '/api' });
     useEffect(() => {
-        getData();
-        return () => {
+        if (response != null) {
+            const List = Object.entries(response).map(([key, value]) => {
+                return value
+            })
+            const newData = List.filter(x => x.codigo != undefined)
+            setIndicators(newData)
         }
-    }, [])
+    }, [response]);
 
     const _RenderItem = ({ item, index }) => {
         return (
