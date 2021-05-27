@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from 'react'
-import { TouchableOpacity, FlatList, ScrollView, ActivityIndicator } from 'react-native'
+import { TouchableOpacity, FlatList, Alert, ActivityIndicator } from 'react-native'
 import { Div as View, Text, Icon } from 'react-native-magnus'
 import { rv, hp } from '../helpers/responsive'
 import useFetch from '../hooks/useFetch'
-import { Loading,Header } from '../components'
+import { Loading, Header } from '../components'
 import moment from 'moment'
 const Details = ({ navigation, route }) => {
     const tittle = route.params.title
     const { id, type } = route.params
     const [Indicators, setIndicators] = useState({})
-    const { response, loading } = useFetch({ method: 'GET', url: `/api/${id}` });
+    const { response, loading, error } = useFetch({ method: 'GET', url: `/api/${id}` });
     useEffect(() => {
         if (response != null) {
             setIndicators(response)
         }
-    }, [response]);
+        if (error) {
+            Alert.alert('Lo sentimos, ha ocurrido un error',
+                error.message, [{
+                    text: 'Intentelo, más tarde',
+                    onPress: () => goBack()
+                }])
+        }
+    }, [response, error]);
 
     const goBack = () => {
         navigation.goBack()

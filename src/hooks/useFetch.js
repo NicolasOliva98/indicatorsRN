@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Axios from 'axios';
 
-Axios.defaults.baseURL = 'https://mindicador.cl/'; 
+Axios.defaults.baseURL = 'https://mindicador.cl/';
 
 const useFetch = (axiosParams) => {
     const [response, setResponse] = useState(null);
@@ -13,7 +13,7 @@ const useFetch = (axiosParams) => {
             setResponse(result.data);
         } catch (error) {
             setError(error);
-            console.log(error);
+            console.log(error.message);
         } finally {
             setloading(false);
         }
@@ -21,10 +21,10 @@ const useFetch = (axiosParams) => {
 
     useEffect(() => {
         fetchData(axiosParams);
-        return()=> {
-           setResponse(null)
-           setError('')
-           setloading(false)     
+        return () => {
+            setResponse(null)
+            setError('')
+            setloading(false)
         }
     }, []);
 

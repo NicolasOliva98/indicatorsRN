@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Div as View, Text, Icon } from 'react-native-magnus'
+import { Div as View, Text } from 'react-native-magnus'
+import { Alert } from 'react-native'
 import { LineChart } from 'react-native-chart-kit'
 import { rv, hp, wp } from '../helpers/responsive'
 import moment from 'moment'
@@ -10,12 +11,19 @@ const WeekDetails = ({ navigation, route }) => {
     const tittle = route.params.title
     const { item, id, type } = route.params
     const [Indicators, setIndicators] = useState([])
-    const { response, loading } = useFetch({ method: 'GET', url: `/api/${id}` });
+    const { response, loading, error } = useFetch({ method: 'GET', url: `/api/${id}` });
     useEffect(() => {
         if (response != null) {
             setIndicators(response.serie.reverse())
         }
-    }, [response]);
+        if (error) {
+            Alert.alert('Lo sentimos, ha ocurrido un error',
+                error.message, [{
+                    text: 'Intentelo, más tarde',
+                    onPress:() => goBack()
+                }])
+        }
+    }, [response, error]);
 
     const goBack = () => {
         navigation.goBack()

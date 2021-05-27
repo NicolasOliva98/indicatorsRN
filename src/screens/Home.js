@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { TouchableOpacity, FlatList } from 'react-native'
+import { TouchableOpacity, FlatList, Alert } from 'react-native'
 import { Div as View, Text, Icon } from 'react-native-magnus'
 import { rv, hp } from '../helpers/responsive'
 import { Loading, Header } from '../components'
@@ -8,7 +8,7 @@ import useFetch from '../hooks/useFetch'
 const Home = ({ navigation, route }) => {
 
     const [Indicators, setIndicators] = useState({})
-    const { response, loading } = useFetch({ method: 'GET', url: '/api' });
+    const { response, loading, error } = useFetch({ method: 'GET', url: '/api' });
     useEffect(() => {
         if (response != null) {
             const List = Object.entries(response).map(([key, value]) => {
@@ -17,7 +17,13 @@ const Home = ({ navigation, route }) => {
             const newData = List.filter(x => x.codigo != undefined)
             setIndicators(newData)
         }
-    }, [response]);
+        if (error) {
+            Alert.alert('Lo sentimos, ha ocurrido un error',
+                error.message, [{
+                    text: 'Intentelo, más tarde',
+                }])
+        }
+    }, [response, error]);
 
     const _RenderItem = ({ item, index }) => {
         return (
@@ -45,7 +51,7 @@ const Home = ({ navigation, route }) => {
         <Loading />
         :
         <View flex={1}>
-            <Header tittle={route.params.tittle}/>
+            <Header tittle={route.params.tittle} />
             <View flex={1} bg='white' px={rv(hp(3))}>
                 <FlatList
                     data={Indicators}
