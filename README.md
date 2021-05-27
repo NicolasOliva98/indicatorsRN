@@ -12,7 +12,7 @@ git clone https://github.com/NicolasOliva98/indicatorsRN.git
 
 npm install or yarn install 
 cd ios pod install 
-
+ 
 npx react-native run-android
 npx react-native run-ios
 
