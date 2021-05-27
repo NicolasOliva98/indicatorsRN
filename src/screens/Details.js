@@ -5,7 +5,8 @@ import { rv, hp } from '../helpers/responsive'
 import Axios from 'axios'
 import moment from 'moment'
 const Details = ({ navigation, route }) => {
-    const id = route.params.title;
+    const tittle = route.params.title;
+    const id = route.params.id;
     const [Indicators, setIndicators] = useState({})
     const [loading, setLoading] = useState(false)
 
@@ -16,7 +17,7 @@ const Details = ({ navigation, route }) => {
         setLoading(false)
     }
     useEffect(() => {
-        navigation.setOptions({ title: id })
+        navigation.setOptions({ title: tittle })
     }, [navigation])
 
     useEffect(() => {
