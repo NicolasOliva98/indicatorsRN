@@ -4,7 +4,7 @@ Aplicación básica de finanzas, consumiendo la API de [Miindicador.cl](https://
 
 ## ¿Como instalar?
 
-Clonar el repositorio
+Clonar el repositorio y seguir los pasos. copy & paste
 ```
 git clone https://github.com/NicolasOliva98/indicatorsRN.git
 
