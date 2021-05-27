@@ -1,6 +1,6 @@
 # Indicator React Native
 
-Aplicación básica de finanzas, consumiendo la API de [Miindicador.cl](https://mindicador.cl/api)
+Aplicación básica de finanzas, consumiendo la API de [Mindicador.cl](https://mindicador.cl/api)
 
 Diseñado con [Magnus UI](https://magnus-ui.com/)
 
